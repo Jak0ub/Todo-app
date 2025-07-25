@@ -16,7 +16,10 @@ install.bat
 ```
 378B278AB2D44E57B1BEE16F1683B7B693E3C4BD5E5BFE4884064FAEB229ECDF
 ```
+---
 
+> ⚠️ **Note:**
+> The file may have bugs, if you find any, please contact me.
 ---
 
 ## 💡 More images
