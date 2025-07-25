@@ -1,4 +1,7 @@
 # ✔️Todo app (Only for Win 11)
+
+<img src="https://github.com/jak0ub/Todo-app/blob/main/img/1.png" width="75%" height="75%">
+
 This tool allows you to **create plans for days, view stats and much more!**. Search option has advanced search capabilities! Go discover it yourself
 
 ---
@@ -16,16 +19,12 @@ install.bat
 
 ---
 
-## 💡 Images
+## 💡 More images
 
-<div style="display: flex; gap: 10px;">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/1.png" width="45%" height="45%">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/2.png" width="45%" height="45%">
-</div>
-<div style="display: flex; gap: 10px;">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/3.png" width="45%" height="45%">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/4.png" width="45%" height="45%">
-</div>
+<img src="https://github.com/jak0ub/Todo-app/blob/main/img/2.png" width="75%" height="75%">
+<img src="https://github.com/jak0ub/Todo-app/blob/main/img/3.png" width="75%" height="75%">
+<img src="https://github.com/jak0ub/Todo-app/blob/main/img/4.png" width="75%" height="75%">
+
 
 ---
 
