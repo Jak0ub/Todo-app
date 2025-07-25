@@ -19,12 +19,12 @@ install.bat
 ## 💡 Images
 
 <div style="display: flex; gap: 10px;">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/1.png" width="30%" height="40%">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/2.png" width="30%" height="40%">
+    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/1.png" width="45%" height="45%">
+    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/2.png" width="45%" height="45%">
 </div>
 <div style="display: flex; gap: 10px;">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/3.png" width="30%" height="40%">
-    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/4.png" width="30%" height="40%">
+    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/3.png" width="45%" height="45%">
+    <img src="https://github.com/jak0ub/Todo-app/blob/main/img/4.png" width="45%" height="45%">
 </div>
 
 ---
