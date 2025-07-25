@@ -17,6 +17,13 @@ year = int(str(now).split(" ")[0].split("-")[0])
 month = int(str(now).split(" ")[0].split("-")[1])
 day = str(now).split(" ")[0].split("-")[2]
 weekday = days[now.weekday()]
+try:
+    with open("free-time.cfg", "r", encoding="utf-8") as file:
+        line = file.readlines()[0]
+    if str(line.strip()) != str(now).split(" ")[0]:
+        os.remove("free-time.cfg")
+except FileNotFoundError:
+    pass
 with open("start.cfg", "r", encoding="utf-8") as file:
     line = str(file.readlines()[0])
 count = 0
@@ -280,13 +287,13 @@ while end.lower() != "q":
                     for task in lines[today].split(";")[1].split(","):
                         if task.split(":")[0] != "" and task != "\n":
                             print(task.split(":")[0])
-                    q3 = input("$~ ")
+                    q3 = input("$~ ").strip()
                     if q3.lower() == "q":
                         break
                     edited = False
                     temp_line = lines[today].split(";")[1].split(",")
                     for task in lines[today].split(";")[1].split(","):
-                        if task.split(":")[0].lower() == q3.lower():
+                        if task.split(":")[0].lower().strip() == q3.lower():
                             edited = True
                             temp_line.pop(temp_line.index(task)) 
                     if edited == False:
@@ -294,8 +301,10 @@ while end.lower() != "q":
                     line = [f"{today + 1};"]
                     for task in temp_line:
                         if task != "\n":
-                            line.append(f"{task},")  
+                            line.append(f"{task},") 
+                    line[-1] = line[-1].strip() 
                     line.append("\n")
+                    input(line)
                     lines[today] = "".join(line)
                     with open("toDo.cfg", "w", encoding="utf-8") as file:
                         file.write("".join(lines))         
