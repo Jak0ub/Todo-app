@@ -17,13 +17,6 @@ year = int(str(now).split(" ")[0].split("-")[0])
 month = int(str(now).split(" ")[0].split("-")[1])
 day = str(now).split(" ")[0].split("-")[2]
 weekday = days[now.weekday()]
-try:
-    with open("free-time.cfg", "r", encoding="utf-8") as file:
-        line = file.readlines()[0]
-    if str(line.strip()) != str(now).split(" ")[0]:
-        os.remove("free-time.cfg")
-except FileNotFoundError:
-    pass
 with open("start.cfg", "r", encoding="utf-8") as file:
     line = str(file.readlines()[0])
 count = 0
@@ -304,7 +297,6 @@ while end.lower() != "q":
                             line.append(f"{task},") 
                     line[-1] = line[-1].strip() 
                     line.append("\n")
-                    input(line)
                     lines[today] = "".join(line)
                     with open("toDo.cfg", "w", encoding="utf-8") as file:
                         file.write("".join(lines))         
@@ -312,19 +304,26 @@ while end.lower() != "q":
                 while True:
                     clear()
                     today = (count + 1)%7
+                    temp_line = []
                     print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n\t|q to quit|\n{" "*((len("        |q to quit|")-len(f"|Editing Tomorrow|") + 8)// 2)}|Editing Tomorrow|\n{"=" * len(f"{" "*((len("        |q to quit|")-len(f"|Editing Tomorrow|") + 8)// 2)}|Editing Tomorrow|")}")
-                    for task in lines[today].split(";")[1].split(","):
-                        if task != "" and task != "\n":
-                            print(task)
+                    try:
+                        for task in lines[today].split(";")[1].split(","):
+                            if task != "" and task != "\n":
+                                print(task)
+                        temp_line = lines[today].split(";")[1].split(",")
+                    except IndexError:
+                        pass
                     q3 = input("$~ ")
                     if q3.lower() == "q":
                         break
                     edited = False
-                    temp_line = lines[today].split(";")[1].split(",")
-                    for task in lines[today].split(";")[1].split(","):
-                        if task.lower() == q3.lower():
-                            edited = True
-                            temp_line.pop(temp_line.index(task)) 
+                    try:
+                        for task in lines[today].split(";")[1].split(","):
+                            if task.lower() == q3.lower():
+                                edited = True
+                                temp_line.pop(temp_line.index(task)) 
+                    except IndexError:
+                        pass
                     if edited == False:
                         temp_line.append(q3)
                     line = [f"{today + 1};"]
