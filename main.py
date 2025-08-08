@@ -145,7 +145,7 @@ while end.lower() != "q":
         if count // 7 == 0:
             print("No data...")
         else:
-            find = input("Search for tasks:")
+            find = input("Search for tasks:").lower()
             text = list(find.lower())
             found = 0
             for message in msg:
