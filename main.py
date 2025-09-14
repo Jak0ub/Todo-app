@@ -196,17 +196,22 @@ while end.lower() != "q":
                             printed = False
                             for task in tasks:
                                 if task == "":
+                                    tasks.pop(tasks.index(task))
+                            for task in tasks:
+                                if task == "" and len(tasks) <= 2:
                                     break
                                 listos.append(f"{task},")
                                 try:
-                                    one = task.split(":")[0]
-                                    two = task.split(":")[1]
-                                    if two.lower() == "done":
-                                        two = "✓"
-                                    else:
-                                        two = "✘"
-                                    print(f"{tasks.index(task) + 1}.{one} {two}") 
-                                    printed = True
+                                    if task != "":      
+                                        one = task.split(":")[0]
+                                        two = task.split(":")[1]
+                                        if two.lower() == "done":
+                                            two = "✓"
+                                        else:
+                                            two = "✘"
+                                        print(f"{tasks.index(task) + 1}.{one} {two}") 
+                                        printed = True
+                                    
                                 except IndexError:
                                     print(f"{tasks.index(task) + 1}.{task} ✘")  
                                     printed = True
