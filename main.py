@@ -4,7 +4,6 @@ import time
 import sys
 def clear():
     os.system("cls")
-os.system(r"cd %appdata%\\Todo-app\\")
 try:
     with open("toDo.cfg.next", "r", encoding="utf-8") as file:
         file.readlines()
