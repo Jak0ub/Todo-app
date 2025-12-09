@@ -333,7 +333,7 @@ while end.lower() != "q":
                     line = [f"{today + 1};"]
                     for task in temp_line:
                         if task != "\n":
-                            line.append(f"{task},")  
+                            line.append(f"{task.strip()},")  
                     line.append("\n")
                     lines[today] = "".join(line)
                     with open("toDo.cfg", "w", encoding="utf-8") as file:
