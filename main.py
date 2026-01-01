@@ -59,7 +59,6 @@ if rounds >= 1:
     count += months[month - 1] - int(line.split("-")[2])
 else:
     count += int(day) - int(line.split("-")[2])
-input(count)
 start_day = days[days.index(weekday) - (count % 7)]
 if count // 7 > 0:
     temp = count // 7
