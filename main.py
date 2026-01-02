@@ -47,6 +47,7 @@ while year != int(line.split("-")[0]):
 if rounds >= 1:
     month = 12
     day = 31 
+    count += 1
 rounds = 0
 while month != int(line.split("-")[1]):
     rounds += 1
