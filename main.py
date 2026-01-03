@@ -35,6 +35,8 @@ while year != int(line.split("-")[0]):
             count += num
     else:
         rounds_temp = 0
+        if month == 1:
+            count += int(day)-1
         while month != 1:
             rounds_temp += 1
             if rounds_temp >= 2:
@@ -42,12 +44,15 @@ while year != int(line.split("-")[0]):
             else:
                 count += int(day)
             month -= 1
-        count += 1  
+        count += 1
+        month = 12
+        day = 31 
+    if (year-1) % 4 == 0:
+        months = [31,29,31,30,31,30,31,31,30,31,30,31]
+    else:
+        months = [31,28,31,30,31,30,31,31,30,31,30,31]  
     year -= 1  
-if rounds >= 1:
-    month = 12
-    day = 31 
-    count += 1
+
 rounds = 0
 while month != int(line.split("-")[1]):
     rounds += 1
