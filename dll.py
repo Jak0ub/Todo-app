@@ -51,10 +51,10 @@ def check_files(count):
             input("Weeks missing...")
             sys.exit()
 
-def writing_changes(days, weekday, q2, days_printed, lines, edit_file, today):
+def writing_changes(q2, days_printed, lines, edit_file, today):
     while True:
         clear()
-        print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n\t|q to quit|\n{" "*((len("        |q to quit|")-len(f"|Editing {days_printed[q2-1]}|") + 8)// 2)}|Editing {days_printed[q2-1]}|\n{"=" * len(f"{" "*((len("        |q to quit|")-len(f"|Editing {days_printed[q2-1]}|") + 8)// 2)}|Editing {days_printed[q2-1]}|")}")
+        print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n\t|q to quit|\n{' '*((len('        |q to quit|')-len(f'|Editing {days_printed[q2-1]}|') + 8)// 2)}|Editing {days_printed[q2-1]}|\n{'=' * len(f"""{' '*((len('''        |q to quit|''')-len(f'''|Editing {days_printed[q2-1]}|''') + 8)// 2)}|Editing {days_printed[q2-1]}|""")}")
         for task in lines[today].split(";")[1].split(","):
             if task.split(":")[0] != "" and task != "\n":
                 print(task.split(":")[0])
@@ -150,7 +150,7 @@ def print_today_tasks(now, listos, day, hour, q1):
     try:
         with open("toDo.cfg", "r", encoding="utf-8") as file:
             linos = file.readlines()
-            print(f"{" "* ((len("|Enter number of done task to mark/unmark it as completed|") - len(f"day: {day}")) // 2)}day: {day}\n{" "* ((len("|Enter number of done task to mark/unmark it as completed|") - len(f"hour: {hour}")) // 2)}hour: {hour}\n{"=" * (len("|Enter number of done task to mark/unmark it as completed|"))}\n|Enter number of done task to mark/unmark it as completed|\n{" "*((len("|Enter number of done task to mark/unmark it as completed|") - len("|Enter q to quit|"))//2)}|Enter q to quit|\n{"=" * (len("|Enter number of done task to mark/unmark it as completed|"))}")
+            print(f"{" "* ((len("|Enter number of done task to mark/unmark it as completed|") - len(f'day: {day}')) // 2)}day: {day}\n{' '* ((len('|Enter number of done task to mark/unmark it as completed|') - len(f'hour: {hour}')) // 2)}hour: {hour}\n{'=' * (len('|Enter number of done task to mark/unmark it as completed|'))}\n|Enter number of done task to mark/unmark it as completed|\n{' '*((len('|Enter number of done task to mark/unmark it as completed|') - len('|Enter q to quit|'))//2)}|Enter q to quit|\n{'=' * (len('|Enter number of done task to mark/unmark it as completed|'))}")
             for line in linos:
                 line = line.strip()
                 day_ = line.split(";")[0]

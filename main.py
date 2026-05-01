@@ -62,7 +62,7 @@ def main(count, day, days, weekday):
                             except IndexError:
                                 bad = True
                         if right >= len(find) * 0.5 and cor >= len(find) * 0.5 or cor >= len(find) * 0.8 and right >= 2:
-                            print(f"{message} -> {saved.split("-> ")[1]}")
+                            print(f"{message} -> {saved.split('-> ')[1]}")
                             found += 1
                     if found == 0:
                         print("Nothing corresponds to your search")
@@ -109,7 +109,7 @@ def main(count, day, days, weekday):
                 except ValueError: input("invalid input");sys.exit()
                 if q2 <= left_of_week and q2 >= 0:
                     today = days.index(weekday)+q2-1
-                    writing_changes(days, weekday, q2, days_printed, lines, edit_file, today)
+                    writing_changes(q2, days_printed, lines, edit_file, today)
                              
             elif q1 == "2":                
                 edit_file = "toDo.cfg.next"
@@ -121,14 +121,14 @@ def main(count, day, days, weekday):
                 with open(edit_file, "r", encoding="utf-8") as file:
                     lines = file.readlines()    
                 if q2 <= 7 and q2 > 0:
-                    writing_changes(days, weekday, q2, days, lines, edit_file, q2-1)
+                    writing_changes(q2, days, lines, edit_file, q2-1)
 
             
         if end == "6":
             temp = ""
             while temp.lower() != "q":
                 clear()
-                print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n   {" "*((len("Enter task name(If task is already in -> task is deleted, else the task is created)") - len("|q to quit|"))//2)}|q to quit|")
+                print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n   {' '*((len('Enter task name(If task is already in -> task is deleted, else the task is created)') - len('|q to quit|'))//2)}|q to quit|")
                 try:
                     with open("template.cfg", "r", encoding="utf-8") as file:
                         line = file.readlines()
