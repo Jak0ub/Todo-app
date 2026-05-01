@@ -1,4 +1,4 @@
-# ✔️Todo app (Only for Win 11)
+# ✔️Todo app (Available for all Windows and Unix based systems)
 
 <img src="https://github.com/jak0ub/Todo-app/blob/main/img/1.png" width="75%" height="75%">
 

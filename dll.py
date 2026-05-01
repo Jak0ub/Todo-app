@@ -1,14 +1,20 @@
 import os
 from datetime import datetime, date
 import sys
+import platform
 
-def clear():
-    os.system("cls")
-
-def menu():
-    clear()
+def check_os():
+    platform_system = platform.system()
+    return platform_system
+def clear(platform_system):
+    if platform_system == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+def menu(platform_system):
+    clear(platform_system)
     end = input("\t\tMENU\t\t\n\n|1| -> |Show all weeks|\n|2| -> |Show top 10 tasks|\n|3| -> |Search for specific task|\n|4| -> |Today's tasks|\n|5| -> |Edit planned tasks|\n|6| -> |Edit template|\n|q| -> |Quit|\n$~ ")
-    clear()
+    clear(platform_system)
     return end
 def init():
     try:
@@ -36,25 +42,30 @@ def get_days_info(year, month, days, weekday, day):
     start_day = days[days.index(weekday) - (count % 7)]
     return count, start_day
 
-def check_files(count):
+def check_files(count, platform_system):
     if count // 7 > 0:
         temp = count // 7
         error = 0
+        os.chdir("weeks")
         for i in range(temp):
             try:
-                with open(f".\\weeks\\{i + 1}.week.cfg", "r", encoding="utf-8") as file: file.readlines()
+                with open(f"{i + 1}.week.cfg", "r", encoding="utf-8") as file: file.readlines()
             except FileNotFoundError: error += 1
-        if error == 1:    
-            os.system(f"ren toDo.cfg {count // 7}.week.cfg & move {count // 7}.week.cfg weeks & ren toDo.cfg.next toDo.cfg")
+        os.chdir("..")
+        if error == 1:
+            if platform_system == "Windows":    
+                os.system(f"ren toDo.cfg {count // 7}.week.cfg & move {count // 7}.week.cfg weeks & ren toDo.cfg.next toDo.cfg")
+            else:
+                os.system(f"mv toDo.cfg {count // 7}.week.cfg & mv {count // 7}.week.cfg weeks/ & mv toDo.cfg.next toDo.cfg")
         elif error >= 2:
-            clear()
+            clear(platform_system)
             input("Weeks missing...")
             sys.exit()
 
-def writing_changes(q2, days_printed, lines, edit_file, today):
+def writing_changes(q2, days_printed, lines, edit_file, today, platform_system):
     while True:
-        clear()
-        print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n\t|q to quit|\n{' '*((len('        |q to quit|')-len(f'|Editing {days_printed[q2-1]}|') + 8)// 2)}|Editing {days_printed[q2-1]}|\n{'=' * len(f"""{' '*((len('''        |q to quit|''')-len(f'''|Editing {days_printed[q2-1]}|''') + 8)// 2)}|Editing {days_printed[q2-1]}|""")}")
+        clear(platform_system)
+        print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n\t|q to quit|\n{' '*((len('        |q to quit|')-len(f'|Editing {days_printed[q2-1]}|') + 8)// 2)}|Editing {days_printed[q2-1]}|\n{'=' * len(f'''{' '*((len('        |q to quit|')-len(f'|Editing {days_printed[q2-1]}|') + 8)// 2)}|Editing {days_printed[q2-1]}|''')}")
         for task in lines[today].split(";")[1].split(","):
             if task.split(":")[0] != "" and task != "\n":
                 print(task.split(":")[0])
@@ -85,10 +96,11 @@ def load_weeks(count):
     sum = []
     msg = []
     if count // 7 >= 1:
+        os.chdir("weeks")
         for i in range(count // 7):
             count_tasks = 0
             try:
-                with open(f".\\weeks\\{i + 1}.week.cfg", "r", encoding="utf-8") as file:
+                with open(f"{i + 1}.week.cfg", "r", encoding="utf-8") as file:
                     linos = file.readlines()
                     for lino in linos:
                         try:
@@ -110,6 +122,7 @@ def load_weeks(count):
             except FileNotFoundError:
                 msg = ["Some weeks are missing..."]
                 break
+        os.chdir("..")
     return msg, num, sum
 
 def mark_tasks(ok, tasks, listos, saved, linos):
@@ -118,11 +131,11 @@ def mark_tasks(ok, tasks, listos, saved, linos):
             try:
                 try:
                     if listos[int(ok) - 1].split(":")[1] == "done,":
-                        listos[int(ok) - 1] = f"{listos[int(ok) - 1].split(",")[0].split(":")[0]},"
+                        listos[int(ok) - 1] = f"{listos[int(ok) - 1].split(',')[0].split(':')[0]},"
                     else:
-                        listos[int(ok) - 1] = f"{listos[int(ok) - 1].split(",")[0]}:done,"
+                        listos[int(ok) - 1] = f"{listos[int(ok) - 1].split(',')[0]}:done,"
                 except IndexError:
-                    listos[int(ok) - 1] = f"{listos[int(ok) - 1].split(",")[0]}:done,"
+                    listos[int(ok) - 1] = f"{listos[int(ok) - 1].split(',')[0]}:done,"
                 lino = "".join(listos)
                 lino = f"{saved};{lino}\n"
                 linos[saved - 1] = lino
@@ -137,7 +150,7 @@ def mark_tasks(ok, tasks, listos, saved, linos):
             try: temp = task.split(":")[1].lower()
             except IndexError: temp = ""
             if temp == "done":
-                tasks[tasks.index(task)] = f"{task.split(":done")[0]},"
+                tasks[tasks.index(task)] = f"{task.split(':done')[0]},"
             else:
                 tasks[tasks.index(task)] = f"{task}:done,"
             lino = ",".join(tasks)
@@ -146,11 +159,11 @@ def mark_tasks(ok, tasks, listos, saved, linos):
             with open("toDo.cfg", "w", encoding="utf-8") as file:
                 file.writelines(linos)
 
-def print_today_tasks(now, listos, day, hour, q1):
+def print_today_tasks(now, listos, day, hour, q1, platform_system):
     try:
         with open("toDo.cfg", "r", encoding="utf-8") as file:
             linos = file.readlines()
-            print(f"{" "* ((len("|Enter number of done task to mark/unmark it as completed|") - len(f'day: {day}')) // 2)}day: {day}\n{' '* ((len('|Enter number of done task to mark/unmark it as completed|') - len(f'hour: {hour}')) // 2)}hour: {hour}\n{'=' * (len('|Enter number of done task to mark/unmark it as completed|'))}\n|Enter number of done task to mark/unmark it as completed|\n{' '*((len('|Enter number of done task to mark/unmark it as completed|') - len('|Enter q to quit|'))//2)}|Enter q to quit|\n{'=' * (len('|Enter number of done task to mark/unmark it as completed|'))}")
+            print(f"{' '* ((len('|Enter number of done task to mark/unmark it as completed|') - len(f'day: {day}')) // 2)}day: {day}\n{' '* ((len('|Enter number of done task to mark/unmark it as completed|') - len(f'hour: {hour}')) // 2)}hour: {hour}\n{'=' * (len('|Enter number of done task to mark/unmark it as completed|'))}\n|Enter number of done task to mark/unmark it as completed|\n{' '*((len('|Enter number of done task to mark/unmark it as completed|') - len('|Enter q to quit|'))//2)}|Enter q to quit|\n{'=' * len('|Enter number of done task to mark/unmark it as completed|')}")
             for line in linos:
                 line = line.strip()
                 day_ = line.split(";")[0]
@@ -170,9 +183,15 @@ def print_today_tasks(now, listos, day, hour, q1):
                                 one = task.split(":")[0]
                                 two = task.split(":")[1]
                                 if two.lower() == "done":
-                                    two = "✓"
+                                    if platform.release()  != "11" and platform_system == "Windows":
+                                        two = "Done"
+                                    else:
+                                        two = "✓"
                                 else:
-                                    two = "✘"
+                                    if platform.release()  != "11" and platform_system == "Windows":
+                                        two = "Undone"
+                                    else:
+                                        two = "✘"
                                 print(f"{tasks.index(task) + 1}.{one} {two}") 
                                 printed = True
                             
@@ -180,7 +199,7 @@ def print_today_tasks(now, listos, day, hour, q1):
                             print(f"{tasks.index(task) + 1}.{task} ✘")  
                             printed = True
                     if printed == False:
-                        clear()
+                        clear(platform_system)
                         with open("template.cfg", "r", encoding="utf-8") as file:
                             lines = file.readlines()
                             try:

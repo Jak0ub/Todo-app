@@ -2,10 +2,10 @@ from datetime import datetime
 import sys
 from dll import *
 
-def main(count, day, days, weekday):
+def main(count, day, days, weekday, platform_system):
     end = ""
     while end.lower() != "q":
-        end = menu()
+        end = menu(platform_system)
         if end in ["1", "2", "3"]: #Options, where data load is needed
             msg, num, sum = load_weeks(count)
 
@@ -16,7 +16,7 @@ def main(count, day, days, weekday):
                     for ms in msg:
                         print(ms)
                 input()
-                clear()
+                clear(platform_system)
             msg = []
             for content in sum:
                 msg.append(f"{content} -> {num[sum.index(content)]}")
@@ -34,7 +34,7 @@ def main(count, day, days, weekday):
                             print(f"{i + 1}: {message}")
                             done.append(message)
                 input()
-                clear()
+                clear(platform_system)
 
             if "3" == end:
                 if count // 7 == 0:
@@ -67,18 +67,18 @@ def main(count, day, days, weekday):
                     if found == 0:
                         print("Nothing corresponds to your search")
                 input()
-                clear()
+                clear(platform_system)
 
         if "4" == end:
             now = datetime.now()
             hour = now.hour
             day = days[now.weekday()]
             while True:
-                clear()
+                clear(platform_system)
                 listos = []
                 printed = False
                 q1 = "y"
-                tasks, saved, linos, listos, printed, q1 = print_today_tasks(now, listos, day, hour, q1)
+                tasks, saved, linos, listos, printed, q1 = print_today_tasks(now, listos, day, hour, q1, platform_system)
                 if q1.lower() != "y" or printed == False: break #Doesnt want to apply template and tasks are empty for today
                 if printed == True:
                     ok = input("$~ ")
@@ -88,7 +88,7 @@ def main(count, day, days, weekday):
 
         if end == "5":
             q1 = input("Enter number of week you want to edit:\n|1| -> |This week|\n|2| -> |Next week|\n$~ ")
-            clear()
+            clear(platform_system)
             if q1 == "1":
                 edit_file = "toDo.cfg"
                 left_of_week = 7 - days.index(weekday)
@@ -101,7 +101,7 @@ def main(count, day, days, weekday):
                     print(f"|{i+1}| -> |{print_this_day}|")
                     days_printed.append(print_this_day)
                 q2 = input("$~ ")
-                clear()
+                clear(platform_system)
 
                 with open(edit_file, "r", encoding="utf-8") as file:
                     lines = file.readlines()
@@ -109,7 +109,7 @@ def main(count, day, days, weekday):
                 except ValueError: input("invalid input");sys.exit()
                 if q2 <= left_of_week and q2 >= 0:
                     today = days.index(weekday)+q2-1
-                    writing_changes(q2, days_printed, lines, edit_file, today)
+                    writing_changes(q2, days_printed, lines, edit_file, today, platform_system)
                              
             elif q1 == "2":                
                 edit_file = "toDo.cfg.next"
@@ -121,13 +121,13 @@ def main(count, day, days, weekday):
                 with open(edit_file, "r", encoding="utf-8") as file:
                     lines = file.readlines()    
                 if q2 <= 7 and q2 > 0:
-                    writing_changes(q2, days, lines, edit_file, q2-1)
+                    writing_changes(q2, days, lines, edit_file, q2-1, platform_system)
 
             
         if end == "6":
             temp = ""
             while temp.lower() != "q":
-                clear()
+                clear(platform_system)
                 print(f"Enter task name(If task is already in -> task is deleted, else the task is created)\n   {' '*((len('Enter task name(If task is already in -> task is deleted, else the task is created)') - len('|q to quit|'))//2)}|q to quit|")
                 try:
                     with open("template.cfg", "r", encoding="utf-8") as file:
@@ -139,7 +139,7 @@ def main(count, day, days, weekday):
                 if line != []:
                     for task in line[0].split(","):
                         if task != "":
-                            print(f"{line[0].split(",").index(task) + 1}. {task}")
+                            print(f"{line[0].split(',').index(task) + 1}. {task}")
                 temp = input("$~ ")
                 if temp.lower() != "q":
                     temp_list = []
@@ -159,7 +159,8 @@ def main(count, day, days, weekday):
                     with open("template.cfg", "w", encoding="utf-8") as file:
                         file.write("".join(main_list))
 if __name__ == "__main__":
+    platform_system = check_os()
     year, month, day, weekday, days = init()
     count, start_day = get_days_info(year, month, days, weekday, day)
-    check_files(count)
-    main(count, day, days, weekday)
+    check_files(count, platform_system)
+    main(count, day, days, weekday, platform_system)
