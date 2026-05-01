@@ -5,11 +5,20 @@
 This tool allows you to **create plans for days, view stats and much more!**. Search option has advanced search capabilities! Go discover it yourself
 
 ---
-## ⬇️ Download and setup (cmd.exe)
-```cmd.exe
+## Download and setup
+### ⬇️ Windows
+```cmd
 cd %TEMP%
 curl https://raw.githubusercontent.com/jak0ub/Todo-app/main/install.bat -o install.bat
 install.bat
+```
+
+### ⬇️ Unix Based
+```bash
+cd /tmp
+curl https://raw.githubusercontent.com/jak0ub/Todo-app/main/install.sh -o install.sh
+chmod +x install.sh
+./install.sh
 ```
 ---
 
