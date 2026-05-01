@@ -92,8 +92,9 @@ while True:
         msg.append("additional info saved...")
     check()
     if len(msg) == 5:
-        msg.append("Downloading main script")
+        msg.append("Downloading scripts")
         os.system("curl https://raw.githubusercontent.com/jak0ub/Todo-app/main/main.py -o main.py")
+        os.system("curl https://raw.githubusercontent.com/jak0ub/Todo-app/main/dll.py -o dll.py")
     check()
     if len(msg) == 6:
         msg.append("Creating Symlink")
