@@ -1,8 +1,8 @@
-# ✔️Todo app (Available for all Windows and Unix based systems)
+# ✔️Todo app
 
 <img src="https://github.com/jak0ub/Todo-app/blob/main/img/1.png" width="75%" height="75%">
 
-This tool allows you to **create plans for days, view stats and much more!**. Search option has advanced search capabilities! Go discover it yourself
+This tool allows you to **create plans for days, view stats and much more!**. Search option has advanced search capabilities. Go discover it yourself!
 
 ---
 ## Download and setup

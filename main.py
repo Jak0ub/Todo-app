@@ -2,19 +2,55 @@ from datetime import datetime
 import sys
 from dll import *
 
-def main(count, day, days, weekday, platform_system):
+def main(count, day, days, weekday, platform_system, year, month):
     end = ""
     while end.lower() != "q":
         end = menu(platform_system)
         if end in ["1", "2", "3"]: #Options, where data load is needed
-            msg, num, sum = load_weeks(count)
-
+            now = datetime.now()
+            year = int(str(now).split(" ")[0].split("-")[0])
+            month = int(str(now).split(" ")[0].split("-")[1])
+            day = str(now).split(" ")[0].split("-")[2]
+            msg, num, sum, tasks_sum = load_weeks(count)
             if "1" == end:
+                weeks_num, years = check_year_count(year, month, day, count)
                 if count // 7 == 0:
                     print("No data...")
                 else:
-                    for ms in msg:
-                        print(ms)
+                    if len(years) != 1:
+                        print("|Select number of desired year|")
+                        for year in years:
+                            print(f"|{years.index(year)+1}| -> |{year}|")
+                        q = input("$~ ")
+                        clear(platform_system)
+                        try: q = int(q)
+                        except ValueError: input("invalid value"); continue
+                        if q > 0 and q <= len(years):
+                            q -= 1
+                            year_sum = 0
+                            printed = 0
+                            analytics = []
+                            for ms in msg:
+                                if q == 0: #First pos, checking only right side
+                                    if msg.index(ms)+1 > weeks_num[q]: print(ms); printed += 1; year_sum += tasks_sum[(msg.index(ms))]; analytics.append(tasks_sum[(msg.index(ms))])
+                                elif q+1 == len(years): #Last pos, checking only left side
+                                    if msg.index(ms)+1 <= weeks_num[q-1]: print(ms); printed += 1; year_sum += tasks_sum[(msg.index(ms))]; analytics.append(tasks_sum[(msg.index(ms))])
+                                else:
+                                    if msg.index(ms)+1 <= weeks_num[q-1] and msg.index(ms)+1 > weeks_num[q]: print(ms); printed += 1; year_sum += tasks_sum[(msg.index(ms))]; analytics.append(tasks_sum[(msg.index(ms))])
+                            #Least tasks:
+                            analytics_temp = analytics.copy()
+                            analytics_temp.sort()
+                            least_tasks = f"{analytics[analytics.index(analytics_temp[0])]}"
+                            most_tasks = f"{analytics[analytics.index(analytics_temp[-1])]}"
+                            print(f"{'='*30}\n{' '*((30-len('summary'))//2)}Summary\n{'='*30}")
+                            print(f"Avg. week tasks:{' '*(30 - len('Avg. week tasks:') - len(str(round(year_sum/printed,2))))}{round(year_sum/printed,2)}")
+                            print(f"Sum:{' '*(30 - len('Sum:') - len(str(year_sum)))}{year_sum}")
+                            print(f"Most tasks:{' '*(30 - len('Most tasks:') - len(most_tasks))}{most_tasks}")
+                            print(f"Least tasks:{' '*(30 - len('Least tasks:') - len(least_tasks))}{least_tasks}")
+                                    
+                    else:
+                        for ms in msg:
+                            print(ms)
                 input()
                 clear(platform_system)
             msg = []
@@ -163,4 +199,4 @@ if __name__ == "__main__":
     year, month, day, weekday, days = init()
     count, start_day = get_days_info(year, month, days, weekday, day)
     check_files(count, platform_system)
-    main(count, day, days, weekday, platform_system)
+    main(count, day, days, weekday, platform_system, year, month)

@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, date
 import sys
-import platform
+import platform, math
 
 def check_os():
     platform_system = platform.system()
@@ -95,6 +95,7 @@ def load_weeks(count):
     num = []
     sum = []
     msg = []
+    tasks_sum = []
     if count // 7 >= 1:
         os.chdir("weeks")
         for i in range(count // 7):
@@ -119,11 +120,12 @@ def load_weeks(count):
                         except IndexError:
                             pass
                 msg.append(f"{i + 1}. Week consists of {count_tasks} done tasks")
+                tasks_sum.append(count_tasks)
             except FileNotFoundError:
                 msg = ["Some weeks are missing..."]
                 break
         os.chdir("..")
-    return msg, num, sum
+    return msg, num, sum, tasks_sum
 
 def mark_tasks(ok, tasks, listos, saved, linos):
     try:
@@ -225,4 +227,36 @@ def print_today_tasks(now, listos, day, hour, q1, platform_system):
     return tasks, saved, linos, listos, printed, q1
 
 
-# def check_year_count(year, count): #To be done O.O
+def check_year_count(year, month, day, count):
+    years = []
+    days_of_years = []
+    with open("start.cfg", "r") as f: r = f.readlines()
+    while year != int(r[0].split("-")[0]):
+        years.append(year)
+        if len(years) == 1:
+            value = date(year, month, int(day)) - date(year, 1, 1)
+        else:
+            value = date(year, 12, 31) - date(year, 1, 1)
+        try:
+            value = int(str(value).split(" ")[0])
+        except ValueError:
+            value = 0
+        days_of_years.append(value)
+        year -= 1
+    value = date(int(r[0].split("-")[0]), 12, 31) - date(int(r[0].split("-")[0]), int(r[0].split("-")[1]), int(r[0].split("-")[2]))
+    try:
+        value = int(str(value).split(" ")[0])
+    except ValueError:
+        value = 0
+    days_of_years.append(value)
+    years.append(int(r[0].split("-")[0]))
+    weeks = count//7
+    weeks_num = []
+    for year in years:
+        if days_of_years[years.index(year)]/7 != int and year is not years[-1]: #Not whole number and is not last in list, round down
+            weeks_num.append(weeks - math.floor(days_of_years[years.index(year)]/7) )
+            weeks -= math.floor(days_of_years[years.index(year)]/7)
+        else:
+            weeks_num.append(weeks - days_of_years[years.index(year)]//7)
+            weeks -= days_of_years[years.index(year)]/7
+    return weeks_num, years
