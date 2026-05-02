@@ -40,9 +40,11 @@ def get_days_info(year, month, days, weekday, day):
     except ValueError:
         count = 0
     start_day = days[days.index(weekday) - (count % 7)]
+    if count > 1: count -= 1
     return count, start_day
 
 def check_files(count, platform_system):
+    
     if count // 7 > 0:
         temp = count // 7
         error = 0
@@ -277,17 +279,19 @@ def get_day_msg(q, platform_system):
         except:
             value = 1
         max_value = int(str(max_value).split(" ")[0])
-        if value < 1 or value > max_value: print("Date not available...")
+        if value > 1: value -= 1
+        if max_value > 1: max_value -= 1
+        if value < 1 or value > max_value: print("Date not available..."); printed += 1
         else:
             week = math.floor(value/7)
             if week*7 == max_value-max_value%7 and value != week*7:
                 with open(f"toDo.cfg", "r", encoding="utf-8") as f: r = f.readlines()
             else:
-                if week*7 == max_value-max_value%7 and value == week*7: week -= 1#Last day of last possible week? Avoid errors
+                if week*7 == max_value-max_value%7 and value == week*7: week -= 1
                 os.chdir("weeks")
                 with open(f"{week+1}.week.cfg", "r", encoding="utf-8") as f: r = f.readlines()
                 os.chdir("..")
-            tasks = r[value%7-1].strip().split(";")
+            tasks = r[value%7].strip().split(";")
             if len(tasks) > 1:
                 tasks = tasks[1].split(",")
                 for task in tasks:
@@ -314,7 +318,8 @@ def get_day_msg(q, platform_system):
                             two = "✘"
                     print(f"|{tasks.index(task)+1}|. {one} {two}")
                     printed += 1
-        if printed == 0: print("No tasks")
+        if printed == 0: 
+            print("No tasks")
     except Exception as e:
         print(f"Error occurred: {e}")
         
