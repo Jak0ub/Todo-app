@@ -13,7 +13,7 @@ def clear(platform_system):
         os.system("clear")
 def menu(platform_system):
     clear(platform_system)
-    end = input("\t\tMENU\t\t\n\n|1| -> |Show all weeks|\n|2| -> |Show top 10 tasks|\n|3| -> |Search for specific task|\n|4| -> |Today's tasks|\n|5| -> |Edit planned tasks|\n|6| -> |Edit template|\n|q| -> |Quit|\n$~ ")
+    end = input("\t\tMENU\t\t\n\n|1| -> |Show all weeks|\n|2| -> |Show top 10 tasks|\n|3| -> |Search for specific task|\n|4| -> |View specific date|\n|5| -> |Today's tasks|\n|6| -> |Edit planned tasks|\n|7| -> |Edit template|\n|q| -> |Quit|\n$~ ")
     clear(platform_system)
     return end
 def init():
@@ -260,3 +260,61 @@ def check_year_count(year, month, day, count):
             weeks_num.append(weeks - days_of_years[years.index(year)]//7)
             weeks -= days_of_years[years.index(year)]/7
     return weeks_num, years
+
+def get_day_msg(q, platform_system):
+    try:
+        clear(platform_system)
+        printed = 0
+        day = int(q.split(".")[0])
+        month = int(q.split(".")[1])
+        year = int(q.split(".")[2])
+        with open("start.cfg", "r") as f: r = f.readlines()[0]
+        now = datetime.now()
+        max_value = date(int(str(now).split(" ")[0].split("-")[0]), int(str(now).split(" ")[0].split("-")[1]), int(str(now).split(" ")[0].split("-")[2])) - date(int(r.split("-")[0]),int(r.split("-")[1]),int(r.split("-")[2]))
+        value = date(year, month, day) - date(int(r.split("-")[0]),int(r.split("-")[1]),int(r.split("-")[2]))
+        try:
+            value = int(str(value).split(" ")[0])
+        except:
+            value = 1
+        max_value = int(str(max_value).split(" ")[0])
+        if value < 1 or value > max_value: print("Date not available...")
+        else:
+            week = math.floor(value/7)
+            if week*7 == max_value-max_value%7 and value != week*7:
+                with open(f"toDo.cfg", "r", encoding="utf-8") as f: r = f.readlines()
+            else:
+                if week*7 == max_value-max_value%7 and value == week*7: week -= 1#Last day of last possible week? Avoid errors
+                os.chdir("weeks")
+                with open(f"{week+1}.week.cfg", "r", encoding="utf-8") as f: r = f.readlines()
+                os.chdir("..")
+            tasks = r[value%7-1].strip().split(";")
+            if len(tasks) > 1:
+                tasks = tasks[1].split(",")
+                for task in tasks:
+                    try:
+                        one = task.split(":")[0]
+                        two = task.split(":")[1]
+                    except IndexError:
+                        if len(task) >= 1 and tasks[-1] is not task: #If the task is short and the task is last in list, ignore this task
+                            if platform.release() != "11" and platform_system == "Windows":
+                                two = "Undone"
+                            else:
+                                two = "✘"
+                        else:
+                            continue
+                    if two.lower() == "done":
+                        if platform.release() != "11" and platform_system == "Windows":
+                            two = "Done"
+                        else:
+                            two = "✓"
+                    else:
+                        if platform.release() != "11" and platform_system == "Windows":
+                            two = "Undone"
+                        else:
+                            two = "✘"
+                    print(f"|{tasks.index(task)+1}|. {one} {two}")
+                    printed += 1
+        if printed == 0: print("No tasks")
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        

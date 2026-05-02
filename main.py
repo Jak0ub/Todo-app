@@ -6,7 +6,7 @@ def main(count, day, days, weekday, platform_system, year, month):
     end = ""
     while end.lower() != "q":
         end = menu(platform_system)
-        if end in ["1", "2", "3"]: #Options, where data load is needed
+        if end in ["1", "2", "3", "4"]: #Options, where data load is needed
             now = datetime.now()
             year = int(str(now).split(" ")[0].split("-")[0])
             month = int(str(now).split(" ")[0].split("-")[1])
@@ -104,8 +104,14 @@ def main(count, day, days, weekday, platform_system, year, month):
                         print("Nothing corresponds to your search")
                 input()
                 clear(platform_system)
+            if "4" == end:
+                clear(platform_system)
+                q3 = input("Enter specific date($f=DD.MM.YYYY)\n$~ ")
+                get_day_msg(q3, platform_system)
+                input()
 
-        if "4" == end:
+
+        if "5" == end:
             now = datetime.now()
             hour = now.hour
             day = days[now.weekday()]
@@ -122,7 +128,7 @@ def main(count, day, days, weekday, platform_system, year, month):
                         break
                     mark_tasks(ok, tasks, listos, saved, linos)
 
-        if end == "5":
+        if end == "6":
             q1 = input("Enter number of week you want to edit:\n|1| -> |This week|\n|2| -> |Next week|\n$~ ")
             clear(platform_system)
             if q1 == "1":
@@ -160,7 +166,7 @@ def main(count, day, days, weekday, platform_system, year, month):
                     writing_changes(q2, days, lines, edit_file, q2-1, platform_system)
 
             
-        if end == "6":
+        if end == "7":
             temp = ""
             while temp.lower() != "q":
                 clear(platform_system)
