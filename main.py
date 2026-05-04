@@ -76,7 +76,7 @@ def main(count, day, days, weekday, platform_system, year, month):
                 if count // 7 == 0:
                     print("No data...")
                 else:
-                    find = input("Search for tasks:").lower()
+                    find = input("Search for tasks:")
                     text = list(find.lower())
                     found = 0
                     for message in msg:
@@ -97,7 +97,7 @@ def main(count, day, days, weekday, platform_system, year, month):
                                     bad = True
                             except IndexError:
                                 bad = True
-                        if right >= len(find) * 0.5 and cor >= len(find) * 0.5 or cor >= len(find) * 0.8 and right >= 2:
+                        if right >= len(find) * 0.5 and cor >= len(find) * 0.5 or cor >= len(find) * 0.8 and right >= 2: 
                             print(f"{message} -> {saved.split('-> ')[1]}")
                             found += 1
                     if found == 0:
@@ -202,6 +202,11 @@ def main(count, day, days, weekday, platform_system, year, month):
                         file.write("".join(main_list))
 if __name__ == "__main__":
     platform_system = check_os()
+    internet = check_internet()
+    if internet: 
+        #Try/except in case the filename is changed etc. The program wont force updates to you
+        try: check_update(platform_system)
+        except: pass
     year, month, day, weekday, days = init()
     count, start_day = get_days_info(year, month, days, weekday, day)
     check_files(count, platform_system)

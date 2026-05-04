@@ -2,6 +2,8 @@ import os
 from datetime import datetime, date
 import sys
 import platform, math
+import requests
+import subprocess
 
 def check_os():
     platform_system = platform.system()
@@ -322,4 +324,48 @@ def get_day_msg(q, platform_system):
             print("No tasks")
     except Exception as e:
         print(f"Error occurred: {e}")
+    
+def check_internet():
+    try:
+        r = requests.get("https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/main.py")
+    except:
+        return False
+    if r.text != "":
+        return True
+
+def check_update(platform_system):
+    update = False
+    files = ["main.py", "dll.py"]
+    for file in files:
+        with open(file, "r", encoding="utf-8") as f:
+            r = f.readlines()
+        r2 = requests.get(f"https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/{file}")
+        if r2.text != "".join(r):
+            update = True
+    if update:
+        clear(platform_system)
+        options = ["y", "n"]
+        q = input(f"Update is available, update? {options[0]}/{options[1]}:").lower()
+        while q not in options:
+            print("Y = yes, N = No")
+            q = input(f"Update is available, update? {options[0]}/{options[1]}:").lower()
+        clear(platform_system)
+        if q == options[0]: #Initialize update
+            #Generate updater python file
+            with open("updater.py", "w") as f: f.write("""
+import requests
+from os import remove
+files = ['main.py', 'dll.py']
+for file in files:
+    remove(file)
+    r = requests.get(f'https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/{file}')
+    with open(file, 'w', encoding='utf-8') as f: f.write(r.text)
+remove(__file__)
+                """)
+            #Start the main subprocess
+            if platform_system != "Windows":
+                subprocess.Popen(['python3', 'update.py'])
+            else:
+                subprocess.Popen(['python', 'update.py'])
+            sys.exit()
         
