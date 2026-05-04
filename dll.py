@@ -327,7 +327,7 @@ def get_day_msg(q, platform_system):
     
 def check_internet():
     try:
-        r = requests.get("https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/main.py")
+        r = requests.get("https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/main/main.py")
     except:
         return False
     if r.text != "":
@@ -339,7 +339,7 @@ def check_update(platform_system):
     for file in files:
         with open(file, "r", encoding="utf-8") as f:
             r = f.readlines()
-        r2 = requests.get(f"https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/{file}")
+        r2 = requests.get(f"https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/main/{file}")
         if r2.text != "".join(r):
             update = True
     if update:
@@ -358,7 +358,7 @@ from os import remove
 files = ['main.py', 'dll.py']
 for file in files:
     try:
-        r = requests.get(f'https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/{file}')
+        r = requests.get(f'https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/main/{file}')
     except: continue
     if r.status_code == 200:
         remove(file)                                                
