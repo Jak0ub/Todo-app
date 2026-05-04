@@ -357,15 +357,18 @@ import requests
 from os import remove
 files = ['main.py', 'dll.py']
 for file in files:
-    remove(file)
-    r = requests.get(f'https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/{file}')
-    with open(file, 'w', encoding='utf-8') as f: f.write(r.text)
+    try:
+        r = requests.get(f'https://raw.githubusercontent.com/Jak0ub/Todo-app/refs/heads/dev/{file}')
+    except: continue
+    if r.status_code == 200:
+        remove(file)                                                
+        with open(file, 'w', encoding='utf-8') as f: f.write(r.text)
 remove(__file__)
                 """)
             #Start the main subprocess
             if platform_system != "Windows":
-                subprocess.Popen(['python3', 'update.py'])
+                subprocess.Popen(['python3', 'updater.py'])
             else:
-                subprocess.Popen(['python', 'update.py'])
+                subprocess.Popen(['python', 'updater.py'])
             sys.exit()
         
